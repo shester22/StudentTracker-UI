@@ -1,0 +1,28 @@
+<div class="card">
+  <div class="card-header">
+    <h3>Attendance Records</h3>
+  </div>
+  <table mat-table [dataSource]="attendance" class="mat-elevation-z8">
+      <!-- Date Column -->
+      <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef> Date </th>
+        <td mat-cell *matCellDef="let element"> {{element.date | date:'longDate'}} </td>
+      </ng-container>
+
+      <!-- Day Column -->
+      <ng-container matColumnDef="day">
+        <th mat-header-cell *matHeaderCellDef> Day </th>
+        <td mat-cell *matCellDef="let element"> {{element.day}} </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+    <div class="attendance-add-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Attendance Date</mat-label>
+        <input matInput type="date" [(ngModel)]="newAttendanceDate" name="newAttendanceDate">
+      </mat-form-field>
+      <button mat-raised-button color="primary" type="button" (click)="addAttendanceRecord()">Add Record</button>
+    </div>
+</div>  

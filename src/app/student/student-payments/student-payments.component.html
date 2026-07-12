@@ -1,0 +1,40 @@
+<div class="card">
+  <div class="card-header">
+    <h3>Payment Records</h3>
+  </div>
+  <table mat-table [dataSource]="paymentData" class="mat-elevation-z8">
+      <!-- Date Column -->
+      <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef> Date </th>
+        <td mat-cell *matCellDef="let element"> {{element.date | date:'MM/dd/yyyy'}} </td>
+      </ng-container>
+
+      <!-- Amount Paid Column -->
+      <ng-container matColumnDef="amount">
+        <th mat-header-cell *matHeaderCellDef> Amount </th>
+        <td mat-cell *matCellDef="let element"> {{element.amount | currency}} </td>
+      </ng-container>
+
+      <!-- Payment For Column -->
+      <ng-container matColumnDef="paymentFor">
+        <th mat-header-cell *matHeaderCellDef> Payment For </th>
+        <td mat-cell *matCellDef="let element"> {{element.paymentFor}} </td>
+      </ng-container>
+
+      <!-- Payment Method Column -->
+      <ng-container matColumnDef="paymentMethod">
+        <th mat-header-cell *matHeaderCellDef> Payment Method </th>
+        <td mat-cell *matCellDef="let element"> {{element.paymentMethod}} </td>
+      </ng-container>
+
+      <!-- Payment Notes Column -->
+      <ng-container matColumnDef="paymentNotes">
+        <th mat-header-cell *matHeaderCellDef> Payment Notes </th>
+        <td mat-cell *matCellDef="let element"> {{element.paymentNotes}} </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+    
+</div>

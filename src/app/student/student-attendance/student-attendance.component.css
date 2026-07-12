@@ -1,0 +1,14 @@
+.mat-elevation-z8 {
+	width: 100%;
+}
+
+.attendance-add-row {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	margin-top: 16px;
+}
+
+.attendance-add-row mat-form-field {
+	min-width: 220px;
+}

@@ -1,0 +1,44 @@
+<div class="card">
+  <div class="card-header">
+    <h3>Testing Records</h3>
+  </div>
+    <table mat-table [dataSource]="testData" class="mat-elevation-z8">
+      <!-- Date Column -->
+      <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef> Date </th>
+        <td mat-cell *matCellDef="let element"> {{element.date | date:'MM/dd/yyyy'}} </td>
+      </ng-container>
+
+      <!-- Rank Column -->
+      <ng-container matColumnDef="rank">
+        <th mat-header-cell *matHeaderCellDef> Rank </th>
+        <td mat-cell *matCellDef="let element"> {{element.rank}} </td>
+      </ng-container>
+
+      <!-- Fee Column -->
+      <ng-container matColumnDef="fee">
+        <th mat-header-cell *matHeaderCellDef> Fee </th>
+        <td mat-cell *matCellDef="let element"> {{element.fee | currency}} </td>
+      </ng-container>
+
+      <!-- Payment Column -->
+      <ng-container matColumnDef="payment">
+        <th mat-header-cell *matHeaderCellDef> Payment </th>
+        <td mat-cell *matCellDef="let element"> {{element.payment | currency}} </td>
+      </ng-container>
+
+      <!-- Test Notes Column -->
+      <ng-container matColumnDef="testNotes">
+        <th mat-header-cell *matHeaderCellDef> Test Notes </th>
+        <td mat-cell *matCellDef="let element"> {{element.testNotes}} </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+    
+  <!-- <div class="flex-container">
+    <div class="column">Left Column Content</div>
+    <div class="column">Right Column Content</div>
+  </div> -->
+</div>

@@ -1,0 +1,25 @@
+.top-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+}
+.divider{
+  height: 1px;
+  background-color: #e0e0e0;
+  margin: 16px 0;
+}
+.spacer {
+  flex: 1 1 auto;
+}
+.desktop-links {
+  margin-right: 16px;
+}
+@media (max-width: 600px) {
+  .desktop-links {
+    display: none;
+  }
+}
+
+

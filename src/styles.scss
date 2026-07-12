@@ -1,1 +1,88 @@
 /* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.card {
+  margin: 10px;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  /* max-width: 300px; */
+   float: left;            /* or float: right */
+  width: fit-content;
+  font-family: sans-serif;
+  border: 1px solid #e0e0e0;
+}
+
+.card-header h3 {
+  margin: 0 0 10px 0;
+  color: #333333;
+}
+
+.card-body p {
+  margin: 0;
+  color: #666666;
+  line-height: 1.4;
+}
+
+.flex-container {
+  display: flex;
+  gap: 20px;          /* Adds space between columns */
+}
+
+.column {
+  flex: 1;            /* Forces both columns to take up equal space */
+}
+
+/* // todo: clean up and move to global scss */
+
+.mat-mdc-table {
+  width: 800px;;
+}
+.mat-mdc-row:nth-child(odd) {
+  background-color: #FFFFFF;
+}
+.mat-mdc-row:hover {
+  background-color: #eeeeee !important;
+  cursor: pointer;
+}
+
+.table-link {
+  color: #3f51b5; /* Primary Material color */
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.mat-mdc-header-cell{
+    background-color: #000000 !important; /* Light grey background */
+    color: #FFFFFF !important; /* Primary Material color */
+    border-right: 1px solid #666666;
+}
+
+.table-link:hover {
+  color: #2c387e;
+  text-decoration: underline;
+}
+
+a:link {
+  color: #3f51b5;
+}
+
+/* visited link */
+a:visited {
+  color: #3f51b5;
+}
+
+/* mouse over link */
+a:hover {
+  color: #CC0000;
+  text-decoration: underline;
+}
+
+/* selected link */
+a:active {
+  color: #CC0000;
+}
