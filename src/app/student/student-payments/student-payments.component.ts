@@ -9,7 +9,7 @@ import { MatTableModule } from '@angular/material/table';
 @Component({
   selector: 'app-student-payments',
   templateUrl: './student-payments.component.html',
-   imports: [MatTableModule, DatePipe, CurrencyPipe ],
+  imports: [MatTableModule, DatePipe, CurrencyPipe ],
   styleUrls: ['./student-payments.component.css']
 })
 export class StudentPaymentsComponent implements OnInit {

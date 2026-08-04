@@ -1,46 +1,51 @@
 <!-- card.component.html -->
-<div class="card">
-  <div class="card-header">
-    <h3>{{ title }}</h3>
-    <h4>{{ subtitle }}</h4>
-  </div>
-  <div class="card-body">
-    <!-- <div>{{ content }}</div> -->
-    <div class="flex-container">
-      <div class="column">
+<div class="canvas" >
+  <div class="card" style="min-width: 45%;">
+    <div class="card-header">
+      <h3>{{ title }}</h3>
+      <h4>{{ subtitle }}</h4>
+    </div>
+    <div class="card-body">
+      <!-- <div>{{ content }}</div> -->
+      <div class="flex-container">
+        <div class="column">
+          <mat-form-field>
+            <mat-label>First Name:</mat-label>
+            <input matInput placeholder="Enter first name" [(ngModel)]="student.firstName" name="firstName">
+          </mat-form-field>
+        </div>
+        <div class="column">
+          <mat-form-field>
+            <mat-label>Last Name:</mat-label>
+          <input matInput placeholder="Enter last name" [(ngModel)]="student.lastName" name="lastName">
+        </mat-form-field>
+        </div>
+      </div>
+      <div>
+      
         <mat-form-field>
-          <mat-label>First Name:</mat-label>
-          <input matInput placeholder="Enter first name" [(ngModel)]="student.firstName" name="firstName">
+            <mat-label>Start Date:</mat-label>
+          <input type="date" matInput placeholder="Enter start date" [ngModel]="startDate | date:'MM/dd/yyyy'" (ngModelChange)="startDate = $event" name="startDate">
         </mat-form-field>
       </div>
-      <div class="column">
-        <mat-form-field>
-          <mat-label>Last Name:</mat-label>
-        <input matInput placeholder="Enter last name" [(ngModel)]="student.lastName" name="lastName">
-      </mat-form-field>
-      </div>
     </div>
-    <div>
-     
-      <mat-form-field>
-          <mat-label>Start Date:</mat-label>
-        <input type="date" matInput placeholder="Enter start date" [ngModel]="startDate | date:'MM/dd/yyyy'" (ngModelChange)="startDate = $event" name="startDate">
-      </mat-form-field>
+    <br/>
+    <div class="card-footer">
+      <button mat-raised-button color="primary">Save</button>
     </div>
   </div>
-  <br/>
-  <div class="card-footer">
-    <button mat-raised-button color="primary">Save</button>
-  </div>
+  <!-- Attendance Card-->
+  
+  <app-student-attendance [student]="student"></app-student-attendance>
+  
+  <!-- Testing Card-->
+ 
+  <app-student-testing [student]="student"></app-student-testing>
+
+  <!-- TODO: split to child component-->
+
+  <app-student-payments [student]="student"></app-student-payments>
 </div>
-<!-- Attendance Card-->
-<app-student-attendance [student]="student"></app-student-attendance>
-
-<!-- Testing Card-->
-<app-student-testing [student]="student"></app-student-testing>
-
-<!-- TODO: split to child component-->
-<app-student-payments [student]="student"></app-student-payments>
 
 
 <!-- <mat-card class="example-card">

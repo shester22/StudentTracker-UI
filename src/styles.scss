@@ -3,6 +3,13 @@
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
+.canvas{
+    margin: 0 auto; 
+    max-width: 1080px; 
+    width: 100%;
+    // display: flex;
+    // flex-direction: column;
+}
 .card {
   margin: 10px;
   background: #ffffff;
@@ -39,7 +46,13 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 /* // todo: clean up and move to global scss */
 
 .mat-mdc-table {
-  width: 800px;;
+  width:100%;
+  
+//   /* Tell flexbox to grow and occupy all remaining vertical space */
+//   flex: 1 1 auto; 
+  
+//   /* Enable vertical scrolling within the table itself if data overflows */
+//   overflow: auto; 
 }
 .mat-mdc-row:nth-child(odd) {
   background-color: #FFFFFF;
@@ -55,6 +68,13 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   font-weight: 500;
   transition: color 0.2s ease;
 }
+
+// .mat-footer-row,
+// .mat-header-row,
+// .mat-mdc-row {
+//     display: inline-flex;
+//     min-width: 100%;
+// }
 
 .mat-mdc-header-cell{
     background-color: #000000 !important; /* Light grey background */

@@ -20,7 +20,6 @@ export class StudentTestingComponent implements OnInit {
   ngOnInit() {
     if(this.student) {
       const sortedTests = [...this.student.testDetails].sort((a, b) => b.testRank - a.testRank);
-
       sortedTests.forEach(test => {
         this.testData.push({
           rank: test.testRank !== undefined ? Rank[test.testRank] : "",
