@@ -7,7 +7,7 @@ import {DatePipe} from '@angular/common';
 import { RouterLink } from '@angular/router';
 
 interface studentTableData{
-  id?: number;
+  id?: string;
   name?: string;
   rank?: string;
   startDate?: Date;
@@ -34,23 +34,20 @@ export class StudentListComponent implements OnInit {
   ngOnInit() {
     this.studentService.getStudentList().subscribe(data => {
       this.studentList = data;
-      if (this.studentList.length > 0) {
-        this.studentList.forEach(student => {
-          console.log(`Student ID: ${student.id}, Name: ${student.firstName} ${student.lastName}, Rank: ${student.currentRank}, Start Date: ${student.startDate}, Last Paid Dues: ${student.lastPaidDues}`);
+      const rows: studentTableData[] = this.studentList.map(student => {
+        var rankValue = student?.currentRank ? Rank[student.currentRank] : 'White Belt';
 
-          var rankValue = student?.currentRank ?  Rank[student.currentRank] : 'White Belt';
+        return {
+          id: student.studentId,
+          name: `${student.firstName} ${student.lastName}`,
+          rank: rankValue,
+          startDate: student.startDate,
+          lastPaidDues: student.lastPaidDues ?? new Date()
+        };
+      });
 
-          var tabledata: studentTableData = {
-            id: student.id,
-            name: `${student.firstName} ${student.lastName}`,
-            rank: rankValue,
-            startDate: student.startDate,
-            lastPaidDues: student.lastPaidDues
-          };
-          this.dataSource.push(tabledata);
-        });
-      }
-   
+      // reassign so mat-table's dataSource setter detects the change and re-renders
+      this.dataSource = rows;
     });
   }
 
