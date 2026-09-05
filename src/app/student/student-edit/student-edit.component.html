@@ -2,31 +2,74 @@
 <div class="canvas" >
   <div class="card" style="min-width: 45%;">
     <div class="card-header">
-      <h3>{{ title }}</h3>
-      <h4>{{ subtitle }}</h4>
+      <div class="row">
+        <div class="column">
+          <h3>{{ title }}</h3>
+        </div>
+        <div class="column">
+           <h4>{{ subtitle }}</h4>
+        </div>
+      </div>
     </div>
     <div class="card-body">
       <!-- <div>{{ content }}</div> -->
       <div class="flex-container">
-        <div class="column">
-          <mat-form-field>
-            <mat-label>First Name:</mat-label>
-            <input matInput placeholder="Enter first name" [(ngModel)]="student.firstName" name="firstName">
-          </mat-form-field>
+        <div class="column avatar-container">
+          <div>
+            <img [src]="student?.photoUrl" alt="Student Photo" class="avatar">
+          </div>
         </div>
         <div class="column">
-          <mat-form-field>
-            <mat-label>Last Name:</mat-label>
-          <input matInput placeholder="Enter last name" [(ngModel)]="student.lastName" name="lastName">
-        </mat-form-field>
+          <div class="row">
+            <mat-form-field>
+              <mat-label>First Name:</mat-label>
+              <input matInput placeholder="Enter first name" [(ngModel)]="student.firstName" name="firstName">
+            </mat-form-field>
+          </div>
+          <div class="row">
+            <mat-form-field>
+              <mat-label>Last Name:</mat-label>
+              <input matInput placeholder="Enter last name" [(ngModel)]="student.lastName" name="lastName">
+            </mat-form-field>
+          </div>
+          <div class="row">
+            <mat-form-field>
+              <mat-label>Date of Birth:</mat-label>
+              <input type="date" matInput placeholder="Enter date of birth" [(ngModel)]="student.dateOfBirth" name="dateOfBirth">
+            </mat-form-field>
+          </div>
         </div>
       </div>
-      <div>
-      
-        <mat-form-field>
-            <mat-label>Start Date:</mat-label>
-          <input type="date" matInput placeholder="Enter start date" [ngModel]="startDate | date:'MM/dd/yyyy'" (ngModelChange)="startDate = $event" name="startDate">
-        </mat-form-field>
+      <div class="flex-container">
+        <div class="column">
+          <mat-form-field>
+            <mat-label>Rank:</mat-label>
+            <input matInput name="rank" value="{{ studentRank }}" placeholder="Enter rank" readonly>
+          </mat-form-field>
+        </div>      
+        <div class="column">
+          <mat-form-field>
+              <mat-label>Start Date:</mat-label>
+            <input type="date" matInput placeholder="Enter start date" [(ngModel)]="student.startDate" name="startDate">
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="flex-container">
+        <div class="column">
+          <mat-form-field>
+            <mat-label>Belt Size:</mat-label>
+            <input matInput placeholder="Enter belt size" [(ngModel)]="student.beltSize" name="beltSize">
+          </mat-form-field>
+        </div>      
+        <div class="column">
+          <mat-form-field>
+              <mat-label>Active:</mat-label>
+            <mat-select [(ngModel)]="student.active" name="active">
+              <mat-option [value]="true">Yes</mat-option> 
+              <mat-option [value]="false">No</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
       </div>
     </div>
     <br/>

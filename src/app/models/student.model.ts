@@ -4,10 +4,10 @@ import { Rank } from "./rank.model";
 import { TestDetail } from "./test-detail.model";
 
 export class Student {
-  id?: number;
+  studentId?: string;
   firstName?: string;
   lastName?: string;
-  dateofBith?: Date;
+  dateOfBirth?: Date;
   // imageUrl?: string;
   startDate?: Date; 
   beltSize?: number;
@@ -18,6 +18,7 @@ export class Student {
   duesPayments: Payment[] = [];
   studentNotes: Note[] = [];
   waiverLink?: string;
+  active?: boolean;
 
   
 

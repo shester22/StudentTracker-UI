@@ -3,10 +3,10 @@ import { Student } from "../../models/student.model";
 
 export const MOCK_STUDENTS: Student[] = [
   {
-    id: 1,
+    studentId: "X1234",
     firstName: 'John',
     lastName: 'Doe',
-    dateofBith: new Date('2005-03-15'),
+    dateOfBirth: new Date('2005-03-15'),
     startDate: new Date('2022-01-10'),
     beltSize: 2,
     classAttendance: [new Date('2026-01-05'), new Date('2026-01-12'), new Date('2026-01-19')],
@@ -23,10 +23,10 @@ export const MOCK_STUDENTS: Student[] = [
     waiverLink: 'http://example.com/waiver1'
   },
   {
-    id: 2,
+    studentId: "X1235",
     firstName: 'Jane',
     lastName: 'Smith',
-    dateofBith: new Date('2006-07-22'),
+    dateOfBirth: new Date('2006-07-22'),
     startDate: new Date('2022-06-15'),
     beltSize: 1,
     classAttendance: [new Date('2026-01-06'), new Date('2026-01-13'), new Date('2026-01-20')],
@@ -58,10 +58,10 @@ export const MOCK_STUDENTS: Student[] = [
     waiverLink: 'http://example.com/waiver2'
   },
   {
-    id: 3,
+    studentId: "X1236",
     firstName: 'Michael',
     lastName: 'Johnson',
-    dateofBith: new Date('2004-11-08'),
+    dateOfBirth: new Date('2004-11-08'),
     startDate: new Date('2021-09-01'),
     beltSize: 3,
     classAttendance: [new Date('2026-01-07'), new Date('2026-01-14'), new Date('2026-01-21')],

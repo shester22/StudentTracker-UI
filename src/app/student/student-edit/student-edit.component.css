@@ -1,3 +1,10 @@
 /* card.component.css */
+.avatar-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #ccc;
+  margin-bottom: 20px;
+}
 
 
