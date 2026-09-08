@@ -39,4 +39,9 @@ getStudentById(id: string):Observable<Student> {
     // return of(student);
 
   }
+
+  UpsertStudent(student: Student): Observable<Student> {
+    const upsertUrl = `${this.apiRootUrl}/upsert`;
+    return this.http.post<Student>(upsertUrl, student);
+  }
 }
