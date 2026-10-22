@@ -12,3 +12,15 @@
 .attendance-add-row mat-form-field {
 	min-width: 220px;
 }
+
+.attendance-card {
+  float: none;
+  box-sizing: border-box;
+  width: 100%;
+  margin: 0;
+  overflow-x: auto;
+}
+
+.attendance-add-row {
+  flex-wrap: wrap;
+}

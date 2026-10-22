@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 import { Student } from '../../models/student.model';
 import { MatTableModule } from '@angular/material/table';
 import { DatePipe } from '@angular/common';
@@ -13,23 +13,24 @@ import { MatFormFieldModule } from '@angular/material/form-field';
   imports: [MatTableModule, DatePipe, FormsModule, MatButtonModule, MatInputModule, MatFormFieldModule],
   styleUrls: ['./student-attendance.component.css']
 })
-export class StudentAttendanceComponent implements OnInit {
+export class StudentAttendanceComponent implements OnChanges {
   
-  displayedColumns: string[] = ['date','day'];
+  displayedColumns: string[] = ['date', 'day', 'type'];
   newAttendanceDate = '';
+  newAttendanceType = '';
   constructor() { }
 
   @Input() student: Student | null = null;
   // need the dates and athe day it was
-  attendance: { date: Date, day: string }[] = [];
+  attendance: { date: Date, day: string, type: string }[] = [];
   attendanceDates: Date[] = [];
 
-  ngOnInit() {
+  ngOnChanges() {
     this.refreshAttendance();
   }
 
   addAttendanceRecord() {
-    if (!this.student || !this.newAttendanceDate) {
+    if (!this.student || !this.newAttendanceDate || !this.newAttendanceType.trim()) {
       return;
     }
 
@@ -38,14 +39,17 @@ export class StudentAttendanceComponent implements OnInit {
       return;
     }
 
-    this.student.classAttendance = [...this.student.classAttendance, newDate];
+    this.student.classAttendance = [...(this.student.classAttendance ?? []), {
+      studentId: this.student.studentId,
+      attendanceDate: this.newAttendanceDate,
+      attendanceType: this.newAttendanceType.trim()
+    }];
     this.newAttendanceDate = '';
+    this.newAttendanceType = '';
     this.refreshAttendance();
   }
 
-  // TODO: need to ad actual save functionality
-  // can do this with a unique endpoint where you send the attendance date and user id or just update and send the whole user
-  // in the future, records will likely be updated by an attendance taking component/module 
+  // Attendance edits are persisted with the parent student form.
   private refreshAttendance() {
     if (!this.student) {
       this.attendanceDates = [];
@@ -53,11 +57,17 @@ export class StudentAttendanceComponent implements OnInit {
       return;
     }
 
-    this.attendanceDates = [...this.student.classAttendance].sort((a, b) => b.getTime() - a.getTime());
-    this.attendance = this.attendanceDates.map(date => ({
-      date,
-      day: date.toLocaleDateString('en-US', { weekday: 'long' })
-    }));
+    this.attendance = (this.student.classAttendance ?? []).map(detail => {
+      // Date-only API values represent local calendar days, not UTC instants.
+      const date = new Date(detail.attendanceDate.length === 10
+        ? `${detail.attendanceDate}T00:00:00`
+        : detail.attendanceDate);
+      return {
+        date,
+        day: date.toLocaleDateString('en-US', { weekday: 'long' }),
+        type: detail.attendanceType
+      };
+    }).sort((a, b) => b.date.getTime() - a.date.getTime());
+    this.attendanceDates = this.attendance.map(record => record.date);
   }
-
 }

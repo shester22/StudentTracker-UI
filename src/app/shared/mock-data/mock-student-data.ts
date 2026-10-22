@@ -9,7 +9,7 @@ export const MOCK_STUDENTS: Student[] = [
     dateOfBirth: new Date('2005-03-15'),
     startDate: new Date('2022-01-10'),
     beltSize: 2,
-    classAttendance: [new Date('2026-01-05'), new Date('2026-01-12'), new Date('2026-01-19')],
+    classAttendance: [{ attendanceDate: '2026-01-05', attendanceType: 'Class' }, { attendanceDate: '2026-01-12', attendanceType: 'Class' }, { attendanceDate: '2026-01-19', attendanceType: 'Class' }],
     currentRank: Rank.Yellow,
     lastPaidDues: new Date('2024-01-15'),
     testDetails: [ { testRank: Rank.Yellow, 
@@ -29,7 +29,7 @@ export const MOCK_STUDENTS: Student[] = [
     dateOfBirth: new Date('2006-07-22'),
     startDate: new Date('2022-06-15'),
     beltSize: 1,
-    classAttendance: [new Date('2026-01-06'), new Date('2026-01-13'), new Date('2026-01-20')],
+    classAttendance: [{ attendanceDate: '2026-01-06', attendanceType: 'Class' }, { attendanceDate: '2026-01-13', attendanceType: 'Class' }, { attendanceDate: '2026-01-20', attendanceType: 'Class' }],
     currentRank: Rank.Green2,
     lastPaidDues: new Date('2024-01-20'),
     testDetails: [
@@ -64,7 +64,7 @@ export const MOCK_STUDENTS: Student[] = [
     dateOfBirth: new Date('2004-11-08'),
     startDate: new Date('2021-09-01'),
     beltSize: 3,
-    classAttendance: [new Date('2026-01-07'), new Date('2026-01-14'), new Date('2026-01-21')],
+    classAttendance: [{ attendanceDate: '2026-01-07', attendanceType: 'Class' }, { attendanceDate: '2026-01-14', attendanceType: 'Class' }, { attendanceDate: '2026-01-21', attendanceType: 'Class' }],
     currentRank: Rank.Blue,
     lastPaidDues: new Date('2024-01-10'),
     testDetails: [

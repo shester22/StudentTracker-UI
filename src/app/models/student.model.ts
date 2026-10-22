@@ -2,6 +2,7 @@ import { Note } from "./note.model";
 import { Payment } from "./payment.model";
 import { Rank } from "./rank.model";
 import { TestDetail } from "./test-detail.model";
+import { AttendanceDetail } from "./attendance-detail";
 
 export class Student {
   studentId?: string;
@@ -12,7 +13,7 @@ export class Student {
   startDate?: Date; 
   beltSize?: number;
   attendanceListId?: string;
-  classAttendance: Date[] = [];
+  classAttendance: AttendanceDetail[] = [];
   currentRank?: Rank;
   lastPaidDues?: Date;
   testDetails: TestDetail[] = [];
