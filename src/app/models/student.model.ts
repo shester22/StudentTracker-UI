@@ -11,11 +11,14 @@ export class Student {
   // imageUrl?: string;
   startDate?: Date; 
   beltSize?: number;
+  attendanceListId?: string;
   classAttendance: Date[] = [];
   currentRank?: Rank;
   lastPaidDues?: Date;
   testDetails: TestDetail[] = [];
+  paymentListId?: string;
   duesPayments: Payment[] = [];
+  noteListId?: string;
   studentNotes: Note[] = [];
   waiverLink?: string;
   active?: boolean;

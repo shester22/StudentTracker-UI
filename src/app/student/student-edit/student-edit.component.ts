@@ -55,6 +55,7 @@ export class StudentEditComponent implements OnInit {
   getStudent() {
     this.studentService.getStudentById(this.studentId).subscribe(data => {
       this.student = data;
+      console.log("Fetched raw student data:", this.student);
       if (this.student) {
         console.log("student:", this.student);
         this.title = `${this.student.firstName} ${this.student.lastName}`;
