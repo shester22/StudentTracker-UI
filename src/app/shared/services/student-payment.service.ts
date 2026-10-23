@@ -1,8 +1,8 @@
 import { inject, Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { PaymentList, StudentPaymentList } from '../../models/payment.model';
+import { Observable, map } from 'rxjs';
+import { Payment, PaymentList, StudentPaymentList } from '../../models/payment.model';
 import { MOCK_STUDENTS } from '../mock-data/mock-student-data';
-import { environment } from '../../../environments/environment.production';
+import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({
@@ -13,17 +13,25 @@ import { HttpClient } from '@angular/common/http';
 // TODO: add methods for adding payment - update the entire payment doc for the student
 export class StudentPaymentService {
   private http = inject(HttpClient);
-  private apiRootUrl = `${environment.apiRootUrl}/Payment`;
+  private apiRootUrl = `${environment.apiRootUrl}/Student/Payments`;
 
 constructor() { }
 
 // will be a list of payments for a single student- updated from the list page
-upsertStudentPayment(paymentData: StudentPaymentList[]):Observable<StudentPaymentList[]> {
-  // TODO: implement the logic to add or update the payment for the student
-  return new Observable<StudentPaymentList[]>(observer => {
-    observer.next(paymentData);
-    observer.complete();
-  });
+upsertStudentPayment(paymentData: PaymentList): Observable<PaymentList> {
+  return this.http.post<{ id: string; studentId: string; count: number; listItems: Payment[] }>(
+    `${this.apiRootUrl}/upsert`, {
+      id: paymentData.paymentListId || undefined,
+      studentId: paymentData.studentId,
+      count: paymentData.payments.length,
+      listItems: paymentData.payments
+    }
+  ).pipe(map(saved => ({
+    paymentListId: saved.id,
+    studentId: saved.studentId,
+    count: saved.count,
+    payments: saved.listItems
+  })));
 }
 
 // single payment for a student

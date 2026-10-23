@@ -5,6 +5,8 @@ import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { of, throwError } from 'rxjs';
 import { StudentEditComponent } from './student-edit.component';
 import { StudentService } from '../../shared/services/student.service';
+import { StudentPaymentService } from '../../shared/services/student-payment.service';
+import { StudentAttendanceService } from '../../shared/services/student-attendance.service';
 import { Student } from '../../models/student.model';
 import { Rank } from '../../models/rank.model';
 import { By } from '@angular/platform-browser';
@@ -22,6 +24,8 @@ describe('StudentEditComponent', () => {
       imports: [StudentEditComponent, FormsModule],
       providers: [
         provideNoopAnimations(),
+        { provide: StudentPaymentService, useValue: jasmine.createSpyObj('StudentPaymentService', ['upsertStudentPayment']) },
+        { provide: StudentAttendanceService, useValue: jasmine.createSpyObj('StudentAttendanceService', ['upsertStudentAttendance']) },
         { provide: StudentService, useValue: service },
         { provide: ActivatedRoute, useValue: { snapshot: { get paramMap() { return convertToParamMap(id ? { id } : {}); } } } }
       ]
@@ -44,7 +48,7 @@ describe('StudentEditComponent', () => {
     await render();
     expect(service.getStudentById).not.toHaveBeenCalled();
     expect(Object.keys(form().controls).sort()).toEqual(['firstName', 'lastName', 'dateOfBirth', 'lastPaidDues', 'active'].sort());
-    form().setValue({ firstName: 'New', lastName: 'Student', dateOfBirth: '2010-02-03', lastPaidDues: '2026-10-01', active: true });
+    form().setValue({ firstName: 'New', lastName: 'Student', dateOfBirth: '02/03/2010', lastPaidDues: '2026-10-01', active: true });
     service.UpsertStudent.and.callFake(student => of(student));
     component.onSubmit(form());
     const saved = service.UpsertStudent.calls.mostRecent().args[0];
@@ -66,7 +70,7 @@ describe('StudentEditComponent', () => {
     service.UpsertStudent.and.callFake(value => of(value));
     await render();
     expect(service.getStudentById).toHaveBeenCalledWith(id);
-    expect(form().value.dateOfBirth).toBe('2010-02-03');
+    expect(form().value.dateOfBirth).toBe('02/03/2010');
     expect(form().value.lastPaidDues).toBe('2026-10-01');
     expect(form().value.active).toBeFalse();
     const rankInput: HTMLInputElement = fixture.nativeElement.querySelector('input[readonly]');

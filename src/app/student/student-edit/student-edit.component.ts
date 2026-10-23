@@ -6,6 +6,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ActivatedRoute } from '@angular/router';
 import { Student } from '../../models/student.model';
+import { BirthDateDirective, parseBirthDate } from './birth-date.directive';
 import { Rank } from '../../models/rank.model';
 import { StudentService } from '../../shared/services/student.service';
 import { StudentAttendanceComponent } from '../student-attendance/student-attendance.component';
@@ -15,7 +16,7 @@ import { StudentPaymentsComponent } from '../student-payments/student-payments.c
 @Component({
   selector: 'app-student-edit',
   templateUrl: './student-edit.component.html',
-  imports: [FormsModule, MatFormFieldModule, MatButtonModule, MatInputModule, MatCheckboxModule, StudentAttendanceComponent, StudentTestingComponent, StudentPaymentsComponent],
+  imports: [FormsModule, MatFormFieldModule, MatButtonModule, MatInputModule, MatCheckboxModule, BirthDateDirective, StudentAttendanceComponent, StudentTestingComponent, StudentPaymentsComponent],
   styleUrls: ['./student-edit.component.css']
 })
 export class StudentEditComponent implements OnInit {
@@ -40,12 +41,15 @@ export class StudentEditComponent implements OnInit {
     return this.student.currentRank === undefined ? '' : `Current Rank: ${Rank[this.student.currentRank]}`;
   }
 
-  get dateOfBirth(): string {
-    return this.formatDateForInput(this.student.dateOfBirth);
-  }
+  dateOfBirth = '';
 
-  set dateOfBirth(value: string) {
-    this.student.dateOfBirth = value ? new Date(`${value}T00:00:00`) : undefined;
+  onBirthDateInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const digits = input.value.replace(/\D/g, '').slice(0, 8);
+    const formatted = [digits.slice(0, 2), digits.slice(2, 4), digits.slice(4, 8)].filter(Boolean).join('/');
+    input.value = formatted;
+    this.dateOfBirth = formatted;
+    this.student.dateOfBirth = parseBirthDate(formatted);
   }
 
   get lastPaidDues(): string {
@@ -81,6 +85,10 @@ export class StudentEditComponent implements OnInit {
     });
   }
 
+  onStudentSaved(student: Student): void {
+    this.setStudent(student);
+  }
+
   private setStudent(student: Student): void {
     this.student = Object.assign(new Student(), student, {
       classAttendance: (student.classAttendance ?? []).map(detail => ({ ...detail })),
@@ -88,6 +96,8 @@ export class StudentEditComponent implements OnInit {
       testDetails: student.testDetails ?? [],
       studentNotes: student.studentNotes ?? []
     });
+    const birthDate = this.formatDateForInput(student.dateOfBirth);
+    this.dateOfBirth = birthDate ? birthDate.slice(5, 7) + '/' + birthDate.slice(8, 10) + '/' + birthDate.slice(0, 4) : '';
     this.title = `${student.firstName ?? ''} ${student.lastName ?? ''}`.trim() || 'Student Card';
   }
 
@@ -105,6 +115,7 @@ export class StudentEditComponent implements OnInit {
       form.control.markAllAsTouched();
       return;
     }
+    this.student.dateOfBirth = parseBirthDate(this.dateOfBirth);
     this.isSaving = true;
     this.errorMessage = '';
     this.statusMessage = '';

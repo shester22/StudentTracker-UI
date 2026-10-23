@@ -1,0 +1,26 @@
+.test-add-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.test-add-row mat-form-field {
+  flex: 1 1 120px;
+  width: 120px;
+  min-width: 100px;
+  --mat-form-field-container-height: 44px;
+  --mat-form-field-container-vertical-padding: 10px;
+}
+
+.test-add-row .test-date-field {
+  flex-basis: 170px;
+  min-width: 150px;
+}
+
+.test-add-row > button {
+  flex: 0 0 auto;
+  margin-bottom: 22px;
+  white-space: nowrap;
+}

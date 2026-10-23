@@ -76,9 +76,9 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 //     min-width: 100%;
 // }
 
-.mat-mdc-header-cell{
-    background-color: #000000 !important; /* Light grey background */
-    color: #FFFFFF !important; /* Primary Material color */
+table th, .mat-mdc-header-cell {
+    background-color: #800000 !important;
+    color: #FFFFFF !important;
     border-right: 1px solid #666666;
 }
 
@@ -105,4 +105,32 @@ a:hover {
 /* selected link */
 a:active {
   color: #CC0000;
+}
+app-student-attendance .attendance-add-row .mat-mdc-text-field-wrapper {
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+app-student-payments .payment-add-row .mat-mdc-text-field-wrapper {
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+app-student-testing .test-add-row .mat-mdc-text-field-wrapper {
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+/* Shared button shape across the site. */
+:root {
+  --mdc-text-button-container-shape: 4px;
+  --mdc-filled-button-container-shape: 4px;
+  --mdc-protected-button-container-shape: 4px;
+  --mdc-outlined-button-container-shape: 4px;
+}
+
+button.mat-mdc-button-base,
+a.mat-mdc-button-base,
+button:not([class*="mat-"]) {
+  border-radius: 4px;
 }

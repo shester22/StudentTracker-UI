@@ -37,9 +37,40 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
       </table>
-      
-    <!-- <div class="flex-container">
-      <div class="column">Left Column Content</div>
-      <div class="column">Right Column Content</div>
-    </div> -->
+      @if (errorMessage) { <p role="alert">{{ errorMessage }}</p> }
+      @if (statusMessage) { <p role="status">{{ statusMessage }}</p> }
+      <form #testForm="ngForm" class="test-add-row" (ngSubmit)="addTest(testForm)">
+        <mat-form-field appearance="outline">
+          <mat-label>Test Rank</mat-label>
+          <mat-select name="testRank" [(ngModel)]="testRank" required [disabled]="isSaving">
+            @for (rank of ranks; track rank.value) { <mat-option [value]="rank.value">{{ rank.label }}</mat-option> }
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="test-date-field">
+          <mat-label>Test Date</mat-label>
+          <input matInput [matDatepicker]="testPicker" [(ngModel)]="testDate" name="testDate" required [disabled]="isSaving" (dateChange)="testPicker.close()">
+          <mat-datepicker-toggle matIconSuffix [for]="testPicker"></mat-datepicker-toggle>
+          <mat-datepicker #testPicker></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Test Fee</mat-label>
+          <input matInput type="number" name="testFee" [(ngModel)]="testFee" required min="0" step="0.01" [disabled]="isSaving">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Payment Amount</mat-label>
+          <input matInput type="number" name="paymentAmount" [(ngModel)]="paymentAmount" min="0" step="0.01" [disabled]="isSaving">
+          <mat-hint>Optional; paid on test date</mat-hint>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Payment Method</mat-label>
+          <mat-select name="paymentType" [(ngModel)]="paymentType" [disabled]="isSaving">
+            @for (method of paymentTypes; track method.value) { <mat-option [value]="method.value">{{ method.label }}</mat-option> }
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Test Notes</mat-label>
+          <input matInput name="testNotes" [(ngModel)]="testNotes" [disabled]="isSaving">
+        </mat-form-field>
+        <button mat-raised-button color="primary" type="submit" [disabled]="testForm.invalid || isSaving || !student?.studentId">{{ isSaving ? 'Saving...' : 'Add Test' }}</button>
+      </form>
   </div>
