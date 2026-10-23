@@ -40,7 +40,8 @@
                 <div class="row">
                   <mat-form-field>
                     <mat-label>Date of Birth</mat-label>
-                    <input matInput type="date" name="dateOfBirth" [(ngModel)]="dateOfBirth">
+                    <input matInput type="text" name="dateOfBirth" [(ngModel)]="dateOfBirth" (input)="onBirthDateInput($event)" appBirthDate #birthDateInput="ngModel" placeholder="MM/DD/YYYY" inputmode="numeric" maxlength="10">
+                    @if (birthDateInput.invalid) { <mat-error>Enter a valid date as MM/DD/YYYY</mat-error> }
                   </mat-form-field>
                 </div>
                 <div class="row">
@@ -74,7 +75,7 @@
   }
   </div>
   @if (!isLoading && !loadFailed && isEditMode && student.studentId) {
-    <app-student-testing [student]="student"></app-student-testing>
+    <app-student-testing [student]="student" (studentSaved)="onStudentSaved($event)"></app-student-testing>
     <app-student-payments [student]="student"></app-student-payments>
   }
 </div>

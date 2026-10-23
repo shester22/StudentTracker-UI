@@ -20,18 +20,44 @@
         <td mat-cell *matCellDef="let element"> {{element.type}} </td>
       </ng-container>
 
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef> Delete </th>
+        <td mat-cell *matCellDef="let element">
+          <button mat-icon-button type="button" aria-label="Delete attendance record"
+            [disabled]="isSaving || !student?.studentId"
+            (click)="pendingDelete = element.detail; deleteDialog.showModal()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M3 6h18M9 6V3h6v3M5 6l1 15h12l1-15M10 10v7M14 10v7" />
+            </svg>
+          </button>
+        </td>
+      </ng-container>
+
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
+    @if (errorMessage) { <p role="alert">{{ errorMessage }}</p> }
     <div class="attendance-add-row">
-      <mat-form-field appearance="outline">
+      <mat-form-field appearance="outline" class="attendance-date-field">
         <mat-label>Attendance Date</mat-label>
-        <input matInput type="date" [(ngModel)]="newAttendanceDate" name="newAttendanceDate">
+        <input matInput [matDatepicker]="attendancePicker" (dateChange)="attendancePicker.close()" [(ngModel)]="attendanceDate" name="newAttendanceDate" #dateInput="ngModel" [disabled]="isSaving" placeholder="MM/DD/YYYY">
+        <mat-datepicker-toggle matIconSuffix [for]="attendancePicker" aria-label="Choose attendance date"></mat-datepicker-toggle>
+        <mat-datepicker #attendancePicker></mat-datepicker>
+        @if (dateInput.invalid) { <mat-error>Enter a valid date</mat-error> }
       </mat-form-field>
       <mat-form-field appearance="outline">
         <mat-label>Attendance Type</mat-label>
-        <input matInput [(ngModel)]="newAttendanceType" name="newAttendanceType" required>
+        <input matInput [(ngModel)]="newAttendanceType" name="newAttendanceType" required [disabled]="isSaving">
       </mat-form-field>
-      <button mat-raised-button color="primary" type="button" (click)="addAttendanceRecord()" [disabled]="!newAttendanceDate || !newAttendanceType.trim()">Add Record</button>
+      <button mat-raised-button color="primary" type="button" (click)="addAttendanceRecord()" [disabled]="isSaving || !student?.studentId || !newAttendanceDate || !newAttendanceType.trim()">{{ isSaving ? 'Saving...' : 'Add Record' }}</button>
     </div>
 </div>
+
+<dialog #deleteDialog class="delete-dialog" aria-labelledby="delete-attendance-title" aria-describedby="delete-attendance-description" (close)="pendingDelete = null">
+  <h2 id="delete-attendance-title">Delete attendance record?</h2>
+  <p id="delete-attendance-description">Delete the {{ pendingDelete?.attendanceType }} attendance record for {{ pendingDelete?.attendanceDate | date:'longDate' }}?</p>
+  <div class="delete-dialog-actions">
+    <button mat-button type="button" autofocus (click)="deleteDialog.close()">Cancel</button>
+    <button mat-raised-button type="button" color="warn" (click)="deleteAttendanceRecord(); deleteDialog.close()">Yes</button>
+  </div>
+</dialog>

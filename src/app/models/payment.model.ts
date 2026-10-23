@@ -2,6 +2,7 @@ import { MonthEnum } from "./month-enum.enum";
 import { PaymentType } from "./payment-type.model";
 
 export interface Payment{
+    paymentId?: string;
     paymentType?: PaymentType;
     amount: number;
     paymentDate: Date;
