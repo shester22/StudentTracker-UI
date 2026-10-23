@@ -1,115 +1,80 @@
-<!-- card.component.html -->
-<div class="canvas" >
-  <div class="card" style="min-width: 45%;">
+<div class="canvas">
+  <div class="student-overview">
+  <div class="card student-card">
     <div class="card-header">
-      <div class="row">
-        <div class="column">
-          <h3>{{ title }}</h3>
-        </div>
-        <div class="column">
-           <h4>{{ subtitle }}</h4>
-        </div>
+      <div class="student-heading">
+        <h3>{{ title }}</h3>
       </div>
+      <h4>{{ subtitle }}</h4>
     </div>
     <div class="card-body">
-      <!-- <div>{{ content }}</div> -->
-      <div class="flex-container">
-        <div class="column avatar-container">
-          <div>
-            <img [src]="student?.photoUrl" alt="Student Photo" class="avatar">
+      @if (isLoading) { <p role="status">Loading student...</p> }
+      @if (errorMessage) { <p role="alert">{{ errorMessage }}</p> }
+      @if (statusMessage) { <p role="status">{{ statusMessage }}</p> }
+      @if (!isLoading && !loadFailed) {
+        <form #studentForm="ngForm" (ngSubmit)="onSubmit(studentForm)">
+          <fieldset [disabled]="isSaving">
+            <div class="flex-container">
+              <div class="avatar-container" role="img" aria-label="Student photo placeholder">
+                <svg class="avatar-placeholder" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+                  <circle cx="50" cy="33" r="18" fill="currentColor" />
+                  <path d="M15 90V80a35 35 0 0 1 70 0v10Z" fill="currentColor" />
+                </svg>
+                <span>Student photo</span>
+              </div>
+              <div class="column">
+                <div class="row">
+                  <mat-form-field>
+                    <mat-label>First Name</mat-label>
+                    <input matInput name="firstName" [(ngModel)]="student.firstName" required #firstName="ngModel">
+                    @if (firstName.hasError('required')) { <mat-error>First name is required</mat-error> }
+                  </mat-form-field>
+                </div>
+                <div class="row">
+                  <mat-form-field>
+                    <mat-label>Last Name</mat-label>
+                    <input matInput name="lastName" [(ngModel)]="student.lastName" required #lastName="ngModel">
+                    @if (lastName.hasError('required')) { <mat-error>Last name is required</mat-error> }
+                  </mat-form-field>
+                </div>
+                <div class="row">
+                  <mat-form-field>
+                    <mat-label>Date of Birth</mat-label>
+                    <input matInput type="date" name="dateOfBirth" [(ngModel)]="dateOfBirth">
+                  </mat-form-field>
+                </div>
+                <div class="row">
+                  <mat-form-field>
+                    <mat-label>Current Rank</mat-label>
+                    <input matInput [value]="currentRankLabel" readonly>
+                    <mat-hint>Calculated from testing history</mat-hint>
+                  </mat-form-field>
+                </div>
+                <div class="row">
+                  <mat-form-field>
+                    <mat-label>Last Paid Dues</mat-label>
+                    <input matInput type="date" name="lastPaidDues" [(ngModel)]="lastPaidDues">
+                  </mat-form-field>
+                </div>
+                <div class="row">
+                  <mat-checkbox name="active" [(ngModel)]="student.active" [disabled]="isSaving">Active</mat-checkbox>
+                </div>
+              </div>
+            </div>
+          </fieldset>
+          <div class="card-footer">
+            <button mat-raised-button color="primary" type="submit" [disabled]="studentForm.invalid || isSaving">{{ isSaving ? 'Saving...' : 'Save' }}</button>
           </div>
-        </div>
-        <div class="column">
-          <div class="row">
-            <mat-form-field>
-              <mat-label>First Name:</mat-label>
-              <input matInput placeholder="Enter first name" [(ngModel)]="student.firstName" name="firstName">
-            </mat-form-field>
-          </div>
-          <div class="row">
-            <mat-form-field>
-              <mat-label>Last Name:</mat-label>
-              <input matInput placeholder="Enter last name" [(ngModel)]="student.lastName" name="lastName">
-            </mat-form-field>
-          </div>
-          <div class="row">
-            <mat-form-field>
-              <mat-label>Date of Birth:</mat-label>
-              <input type="date" matInput placeholder="Enter date of birth" [(ngModel)]="student.dateOfBirth" name="dateOfBirth">
-            </mat-form-field>
-          </div>
-        </div>
-      </div>
-      <div class="flex-container">
-        <div class="column">
-          <mat-form-field>
-            <mat-label>Rank:</mat-label>
-            <input matInput name="rank" value="{{ studentRank }}" placeholder="Enter rank" readonly>
-          </mat-form-field>
-        </div>      
-        <div class="column">
-          <mat-form-field>
-              <mat-label>Start Date:</mat-label>
-            <input type="date" matInput placeholder="Enter start date" [(ngModel)]="student.startDate" name="startDate">
-          </mat-form-field>
-        </div>
-      </div>
-      <div class="flex-container">
-        <div class="column">
-          <mat-form-field>
-            <mat-label>Belt Size:</mat-label>
-            <input matInput placeholder="Enter belt size" [(ngModel)]="student.beltSize" name="beltSize">
-          </mat-form-field>
-        </div>      
-        <div class="column">
-          <mat-form-field>
-              <mat-label>Active:</mat-label>
-            <mat-select [(ngModel)]="student.active" name="active">
-              <mat-option [value]="true">Yes</mat-option> 
-              <mat-option [value]="false">No</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-      </div>
-    </div>
-    <br/>
-    <div class="card-footer">
-      <button mat-raised-button color="primary">Save</button>
+        </form>
+      }
     </div>
   </div>
-  <!-- Attendance Card-->
-  
-  <app-student-attendance [student]="student"></app-student-attendance>
-  
-  <!-- Testing Card-->
- 
-  <app-student-testing [student]="student"></app-student-testing>
-
-  <!-- TODO: split to child component-->
-
-  <app-student-payments [student]="student"></app-student-payments>
+  @if (!isLoading && !loadFailed && isEditMode && student.studentId) {
+    <app-student-attendance [student]="student"></app-student-attendance>
+  }
+  </div>
+  @if (!isLoading && !loadFailed && isEditMode && student.studentId) {
+    <app-student-testing [student]="student"></app-student-testing>
+    <app-student-payments [student]="student"></app-student-payments>
+  }
 </div>
-
-
-<!-- <mat-card class="example-card">
-  <mat-card-header>
-    <div mat-card-avatar class="example-header-image"></div>
-    <mat-card-title>Shiba Inu</mat-card-title>
-    <mat-card-subtitle>Dog Breed</mat-card-subtitle>
-  </mat-card-header>
-  <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">
-  <mat-card-content>
-    <p>
-      The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
-      A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
-      bred for hunting.
-    </p>
-  </mat-card-content> -->
-  <!-- <mat-card-actions>
-    <button mat-button>LIKE</button>
-    <button mat-button>SHARE</button>
-  </mat-card-actions> -->
-<!-- </mat-card> -->
-
-
-  

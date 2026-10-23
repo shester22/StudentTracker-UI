@@ -1,10 +1,51 @@
-/* card.component.css */
 .avatar-container {
   display: flex;
+  flex: 0 0 140px;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  border: 1px solid #ccc;
-  margin-bottom: 20px;
+  align-self: flex-start;
+  gap: 12px;
+  height: 180px;
+  border: 1px dashed #bdbdbd;
+  border-radius: 8px;
+  background: #f5f5f5;
+  color: #757575;
+  font-size: 14px;
+}
+
+.avatar-placeholder {
+  width: 88px;
+  height: 88px;
+  color: #bdbdbd;
 }
 
 
+.student-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.student-overview {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 20px;
+  padding: 10px;
+}
+
+.student-card {
+  float: none;
+  flex: 1 1 460px;
+  box-sizing: border-box;
+  min-width: 0;
+  margin: 0;
+}
+
+.student-overview > app-student-attendance {
+  display: block;
+  flex: 1 1 420px;
+  min-width: 0;
+}

@@ -7,7 +7,7 @@ export interface Payment{
     paymentDate: Date;
     forMonth?: MonthEnum;
     forYear?: number;
-    paymentNotes?: string;
+    paymentNote?: string;
 }
 
 export interface PaymentList {

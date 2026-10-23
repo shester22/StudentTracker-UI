@@ -26,7 +26,7 @@ export class StudentPaymentsComponent implements OnInit {
           amount: payment.amount,
           paymentFor: "Monthly Dues: " + (payment.forMonth !== undefined && payment.forYear !== undefined ? `${MonthEnum[payment.forMonth]}/${payment.forYear}` : ""),
           paymentMethod: (payment.paymentType !== undefined ? PaymentType[payment.paymentType]   : ""),
-          paymentNotes: payment.paymentNotes
+          paymentNotes: payment.paymentNote
         });
       });
 
@@ -38,7 +38,7 @@ export class StudentPaymentsComponent implements OnInit {
               amount: test.payment.amount,
               paymentFor: "Test: " + (test.testRank !== undefined && test.testDate !== undefined ? `${Rank[test.testRank]} Belt - ${new Date(test.testDate).toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' })}` : ""),
               paymentMethod: (test.payment.paymentType !== undefined ? PaymentType[test.payment.paymentType]   : ""),
-              paymentNotes: test.payment.paymentNotes
+              paymentNotes: test.payment.paymentNote
             });
           }
         });
