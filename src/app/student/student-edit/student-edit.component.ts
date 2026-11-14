@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, inject } from '@angular/core';
+import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild, inject, signal } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -19,8 +19,23 @@ import { StudentPaymentsComponent } from '../student-payments/student-payments.c
   imports: [FormsModule, MatFormFieldModule, MatButtonModule, MatInputModule, MatCheckboxModule, BirthDateDirective, StudentAttendanceComponent, StudentTestingComponent, StudentPaymentsComponent],
   styleUrls: ['./student-edit.component.css']
 })
-export class StudentEditComponent implements OnInit {
+export class StudentEditComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
+  readonly studentCardHeight = signal<number | null>(null);
+  private cardObserver?: ResizeObserver;
+
+  @ViewChild('studentCard') set studentCard(element: ElementRef<HTMLElement> | undefined) {
+    this.cardObserver?.disconnect();
+    if (!element) return;
+    this.cardObserver = new ResizeObserver(() => {
+      this.studentCardHeight.set(element.nativeElement.getBoundingClientRect().height);
+    });
+    this.cardObserver.observe(element.nativeElement);
+  }
+
+  ngOnDestroy(): void {
+    this.cardObserver?.disconnect();
+  }
   @Input() title = 'New Student';
   @Input() content = '';
   student: Student = Object.assign(new Student(), { currentRank: Rank.White, active: true });
@@ -76,6 +91,7 @@ export class StudentEditComponent implements OnInit {
       next: student => {
         this.setStudent(student);
         this.isLoading = false;
+        console.log('Student loaded:', student);
       },
       error: () => {
         this.loadFailed = true;

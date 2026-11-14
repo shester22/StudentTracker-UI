@@ -2,7 +2,8 @@
   <div class="card-header">
     <h3>Attendance Records</h3>
   </div>
-  <table mat-table [dataSource]="attendance" class="mat-elevation-z8">
+  <div class="attendance-table-container">
+  <table mat-table [dataSource]="attendancePage" class="mat-elevation-z8">
       <!-- Date Column -->
       <ng-container matColumnDef="date">
         <th mat-header-cell *matHeaderCellDef> Date </th>
@@ -36,6 +37,7 @@
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
+    </div>
     @if (errorMessage) { <p role="alert">{{ errorMessage }}</p> }
     <div class="attendance-add-row">
       <mat-form-field appearance="outline" class="attendance-date-field">
@@ -51,7 +53,11 @@
       </mat-form-field>
       <button mat-raised-button color="primary" type="button" (click)="addAttendanceRecord()" [disabled]="isSaving || !student?.studentId || !newAttendanceDate || !newAttendanceType.trim()">{{ isSaving ? 'Saving...' : 'Add Record' }}</button>
     </div>
+    <mat-paginator [length]="attendance.length" [pageSize]="pageSize" [pageIndex]="pageIndex"
+      [hidePageSize]="true" [showFirstLastButtons]="true" (page)="pageIndex = $event.pageIndex"
+      aria-label="Attendance records pages"></mat-paginator>
 </div>
+
 
 <dialog #deleteDialog class="delete-dialog" aria-labelledby="delete-attendance-title" aria-describedby="delete-attendance-description" (close)="pendingDelete = null">
   <h2 id="delete-attendance-title">Delete attendance record?</h2>

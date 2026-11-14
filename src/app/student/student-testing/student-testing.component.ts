@@ -7,7 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { provideNativeDateAdapter } from '@angular/material/core';
+import { MAT_NATIVE_DATE_FORMATS, provideNativeDateAdapter } from '@angular/material/core';
 import { Student } from '../../models/student.model';
 import { Rank } from '../../models/rank.model';
 import { PaymentType } from '../../models/payment-type.model';
@@ -18,14 +18,21 @@ import { StudentService } from '../../shared/services/student.service';
   selector: 'app-student-testing',
   templateUrl: './student-testing.component.html',
   imports: [MatTableModule, DatePipe, CurrencyPipe, FormsModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatButtonModule, MatDatepickerModule],
-  providers: [provideNativeDateAdapter()],
+  providers: [provideNativeDateAdapter({
+    ...MAT_NATIVE_DATE_FORMATS,
+    display: {
+      ...MAT_NATIVE_DATE_FORMATS.display,
+      dateInput: { month: '2-digit', day: '2-digit', year: 'numeric' }
+    }
+  })],
   styleUrls: ['./student-testing.component.css']
 })
 export class StudentTestingComponent implements OnChanges {
   @Input() student: Student | null = null;
   @Output() studentSaved = new EventEmitter<Student>();
-  displayedColumns = ['rank', 'date', 'fee', 'payment', 'testNotes'];
-  testData: { rank: string; date: Date; fee: Number; payment: number | null; testNotes?: string }[] = [];
+  displayedColumns = ['rank', 'date', 'fee', 'payment', 'testNotes', 'actions'];
+  testData: { rank: string; date: Date; fee: Number; payment: number | null; testNotes?: string; test: TestDetail }[] = [];
+  pendingDelete: TestDetail | null = null;
   testRank: Rank = Rank.White;
   testDate: Date | null = null;
   testFee: number | null = null;
@@ -84,13 +91,39 @@ export class StudentTestingComponent implements OnChanges {
     });
   }
 
+  deleteTest(): void {
+    const student = this.student;
+    const test = this.pendingDelete;
+    this.pendingDelete = null;
+    if (this.isSaving || !student?.studentId || !test || !student.testDetails.includes(test)) return;
+
+    const testDetails = student.testDetails.filter(detail => detail !== test);
+    this.isSaving = true;
+    this.errorMessage = '';
+    this.statusMessage = '';
+    this.studentService.UpsertStudent({ ...student, testDetails }).subscribe({
+      next: saved => {
+        Object.assign(student, saved);
+        this.isSaving = false;
+        this.statusMessage = 'Test deleted successfully.';
+        this.refreshTests();
+        this.studentSaved.emit(saved);
+      },
+      error: () => {
+        this.isSaving = false;
+        this.errorMessage = 'Unable to delete test. Please try again.';
+      }
+    });
+  }
+
   private refreshTests(): void {
     this.testData = [...(this.student?.testDetails ?? [])].sort((a, b) => b.testRank - a.testRank).map(test => ({
       rank: Rank[test.testRank],
       date: new Date(test.testDate),
       fee: test.testFee ?? 0,
       payment: test.payment?.amount ?? null,
-      testNotes: test.testNotes
+      testNotes: test.testNotes,
+      test
     }));
   }
 }

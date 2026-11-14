@@ -3,6 +3,7 @@ import { Student } from '../../models/student.model';
 import { AttendanceDetail } from '../../models/attendance-detail';
 import { StudentAttendanceService } from '../../shared/services/student-attendance.service';
 import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
 import { DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -14,7 +15,7 @@ import { provideNativeDateAdapter } from '@angular/material/core';
 @Component({
   selector: 'app-student-attendance',
   templateUrl: './student-attendance.component.html',
-  imports: [MatTableModule, DatePipe, FormsModule, MatButtonModule, MatInputModule, MatFormFieldModule, MatDatepickerModule],
+  imports: [MatTableModule, DatePipe, FormsModule, MatButtonModule, MatInputModule, MatFormFieldModule, MatDatepickerModule, MatPaginatorModule],
   providers: [provideNativeDateAdapter()],
   styleUrls: ['./student-attendance.component.css']
 })
@@ -32,6 +33,12 @@ export class StudentAttendanceComponent implements OnChanges {
   // need the dates and athe day it was
   attendance: { date: Date, day: string, type: string, detail: AttendanceDetail }[] = [];
   attendanceDates: Date[] = [];
+  readonly pageSize = 8;
+  pageIndex = 0;
+
+  get attendancePage() {
+    return this.attendance.slice(this.pageIndex * this.pageSize, (this.pageIndex + 1) * this.pageSize);
+  }
 
   get newAttendanceDate(): string {
     const date = this.attendanceDate;
@@ -45,6 +52,7 @@ export class StudentAttendanceComponent implements OnChanges {
     this.attendanceDate = value ? new Date(`${value}T00:00:00`) : null;
   }
   ngOnChanges() {
+    this.pageIndex = 0;
     this.refreshAttendance();
   }
 
@@ -134,6 +142,7 @@ export class StudentAttendanceComponent implements OnChanges {
         detail
       };
     }).sort((a, b) => b.date.getTime() - a.date.getTime());
+    this.pageIndex = Math.min(this.pageIndex, Math.max(0, Math.ceil(this.attendance.length / this.pageSize) - 1));
     this.attendanceDates = this.attendance.map(record => record.date);
   }
 }

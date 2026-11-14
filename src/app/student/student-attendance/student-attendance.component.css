@@ -71,3 +71,46 @@
   --mat-form-field-container-height: 44px;
   --mat-form-field-container-vertical-padding: 10px;
 }
+
+:host {
+  display: block;
+}
+
+.attendance-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+
+.attendance-table-container {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+}
+
+.attendance-card > .card-header,
+.attendance-card > .attendance-add-row,
+.attendance-card > mat-paginator {
+  flex-shrink: 0;
+}
+
+.attendance-card .mat-mdc-row {
+  height: 40px;
+}
+
+.attendance-card .mat-mdc-header-row {
+  height: 40px;
+}
+
+.attendance-card .mat-mdc-cell,
+.attendance-card .mat-mdc-header-cell {
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.attendance-card .mat-mdc-icon-button {
+  --mdc-icon-button-state-layer-size: 32px;
+  --mat-icon-button-touch-target-display: none;
+  padding: 6px;
+}

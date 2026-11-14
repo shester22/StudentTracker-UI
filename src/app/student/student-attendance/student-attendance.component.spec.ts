@@ -95,6 +95,34 @@ describe('StudentAttendanceComponent', () => {
     expect(service.upsertStudentAttendance).not.toHaveBeenCalled();
   });
 
+  it('paginates sorted attendance with eight records per page', () => {
+    component.student!.classAttendance = Array.from({ length: 17 }, (_, index) => ({
+      attendanceId: String(index), attendanceDate: `2026-10-${String(index + 1).padStart(2, '0')}`, attendanceType: 'Class'
+    }));
+    component.ngOnChanges();
+    expect(component.attendancePage.length).toBe(8);
+    expect(component.attendancePage[0].detail.attendanceId).toBe('16');
+    component.pageIndex = 1;
+    expect(component.attendancePage.length).toBe(8);
+    component.pageIndex = 2;
+    expect(component.attendancePage.length).toBe(1);
+  });
+
+  it('moves to the previous page after deleting the last row on the final page', () => {
+    component.student!.classAttendance = Array.from({ length: 9 }, (_, index) => ({
+      attendanceId: String(index), attendanceDate: `2026-10-${String(index + 1).padStart(2, '0')}`, attendanceType: 'Class'
+    }));
+    component.ngOnChanges();
+    component.pageIndex = 1;
+    component.pendingDelete = component.attendancePage[0].detail;
+    const response = new Subject<AttendanceRecord>();
+    service.upsertStudentAttendance.and.returnValue(response);
+    component.deleteAttendanceRecord();
+    response.next(service.upsertStudentAttendance.calls.mostRecent().args[0]);
+    expect(component.pageIndex).toBe(0);
+    expect(component.attendancePage.length).toBe(8);
+  });
+
   it('requires a saved student before saving attendance', () => {
     component.student!.studentId = undefined;
     component.addAttendanceRecord();
