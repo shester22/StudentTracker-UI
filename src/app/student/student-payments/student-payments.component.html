@@ -33,8 +33,65 @@
         <td mat-cell *matCellDef="let element"> {{element.paymentNotes}} </td>
       </ng-container>
 
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef> Delete </th>
+        <td mat-cell *matCellDef="let element">
+          <button mat-icon-button type="button" aria-label="Delete payment record"
+            [disabled]="isSaving || !student?.studentId"
+            (click)="pendingDelete = element; deleteDialog.showModal()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M3 6h18M9 6V3h6v3M5 6l1 15h12l1-15M10 10v7M14 10v7" />
+            </svg>
+          </button>
+        </td>
+      </ng-container>
+
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
+    @if (errorMessage) { <p role="alert">{{ errorMessage }}</p> }
+    @if (statusMessage) { <p role="status">{{ statusMessage }}</p> }
+    <form #paymentForm="ngForm" class="payment-add-row" (ngSubmit)="addPayment(paymentForm)">
+      <mat-form-field appearance="outline" class="payment-date-field">
+        <mat-label>Payment Date</mat-label>
+        <input matInput [matDatepicker]="paymentPicker" [(ngModel)]="paymentDate" name="paymentDate" required [disabled]="isSaving" (dateChange)="paymentPicker.close()">
+        <mat-datepicker-toggle matIconSuffix [for]="paymentPicker"></mat-datepicker-toggle>
+        <mat-datepicker #paymentPicker></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Amount</mat-label>
+        <input matInput type="number" name="amount" [(ngModel)]="amount" required min="0.01" step="0.01" [disabled]="isSaving">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Dues Month</mat-label>
+        <mat-select name="forMonth" [(ngModel)]="forMonth" required [disabled]="isSaving">
+          @for (month of months; track month.value) { <mat-option [value]="month.value">{{ month.label }}</mat-option> }
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Dues Year</mat-label>
+        <input matInput type="number" name="forYear" [(ngModel)]="forYear" required min="1900" max="9999" step="1" [disabled]="isSaving">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Payment Method</mat-label>
+        <mat-select name="paymentType" [(ngModel)]="paymentType" required [disabled]="isSaving">
+          @for (method of paymentTypes; track method.value) { <mat-option [value]="method.value">{{ method.label }}</mat-option> }
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="payment-note-field">
+        <mat-label>Notes</mat-label>
+        <input matInput name="paymentNote" [(ngModel)]="paymentNote" [disabled]="isSaving">
+      </mat-form-field>
+      <button mat-raised-button color="primary" type="submit" [disabled]="paymentForm.invalid || isSaving || !student?.studentId">{{ isSaving ? 'Saving...' : 'Add Payment' }}</button>
+    </form>
     
 </div>
+
+<dialog #deleteDialog class="delete-dialog" aria-labelledby="delete-payment-title" aria-describedby="delete-payment-description" (close)="pendingDelete = null">
+  <h2 id="delete-payment-title">Delete payment record?</h2>
+  <p id="delete-payment-description">Delete the {{ pendingDelete?.payment?.amount | currency }} payment for {{ pendingDelete?.payment?.paymentDate | date:'MM/dd/yyyy' }}?</p>
+  <div class="delete-dialog-actions">
+    <button mat-button type="button" autofocus (click)="deleteDialog.close()">Cancel</button>
+    <button mat-raised-button type="button" color="warn" (click)="deletePayment(); deleteDialog.close()">Yes</button>
+  </div>
+</dialog>

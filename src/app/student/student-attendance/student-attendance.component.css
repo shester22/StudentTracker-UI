@@ -5,12 +5,20 @@
 .attendance-add-row {
 	display: flex;
 	align-items: center;
-	gap: 12px;
+	gap: 8px;
 	margin-top: 16px;
 }
 
 .attendance-add-row mat-form-field {
-	min-width: 220px;
+  flex: 1 1 120px;
+  width: 120px;
+  min-width: 90px;
+}
+
+.attendance-add-row > button {
+  flex: 0 0 auto;
+  white-space: nowrap;
+  margin-bottom: 22px;
 }
 
 .attendance-card {
@@ -22,5 +30,87 @@
 }
 
 .attendance-add-row {
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+}
+
+.attendance-add-row .attendance-date-field {
+  width: 180px;
+  min-width: 150px;
+  flex: 0 1 180px;
+}
+
+.delete-dialog {
+  max-width: 400px;
+  width: calc(100% - 64px);
+  padding: 24px;
+  border: 0;
+  border-radius: 8px;
+  box-shadow: 0 8px 32px #0004;
+}
+
+.delete-dialog::backdrop {
+  background: #0006;
+}
+
+.delete-dialog h2 {
+  margin-top: 0;
+}
+
+.delete-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 24px;
+}
+
+.mat-column-actions svg {
+  color: #CC0000;
+}
+
+.attendance-add-row mat-form-field {
+  --mat-form-field-container-height: 44px;
+  --mat-form-field-container-vertical-padding: 10px;
+}
+
+:host {
+  display: block;
+}
+
+.attendance-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+
+.attendance-table-container {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+}
+
+.attendance-card > .card-header,
+.attendance-card > .attendance-add-row,
+.attendance-card > mat-paginator {
+  flex-shrink: 0;
+}
+
+.attendance-card .mat-mdc-row {
+  height: 40px;
+}
+
+.attendance-card .mat-mdc-header-row {
+  height: 40px;
+}
+
+.attendance-card .mat-mdc-cell,
+.attendance-card .mat-mdc-header-cell {
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.attendance-card .mat-mdc-icon-button {
+  --mdc-icon-button-state-layer-size: 32px;
+  --mat-icon-button-touch-target-display: none;
+  padding: 6px;
 }
