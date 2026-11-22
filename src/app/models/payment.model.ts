@@ -13,7 +13,8 @@ export interface Payment{
 
 export interface PaymentList {
     studentId: string;
-    paymentListId: string;
+    studentName?: string;
+    paymentListId?: string;     // is this needed?
     count: number;
     payments: Payment[];
 }

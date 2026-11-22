@@ -1,0 +1,69 @@
+.report-form {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  overflow-x: auto;
+}
+
+.report-form mat-form-field {
+  flex: 0 0 200px;
+}
+
+.report-form button {
+  flex-shrink: 0;
+}
+
+.report-form .print-button {
+  margin-left: auto;
+}
+.report-table {
+  overflow-x: auto;
+}
+
+.report-total .mat-mdc-footer-cell {
+  font-size: 1rem;
+  font-weight: 700;
+  border-top: 2px solid #e0e0e0;
+}
+
+@media print {
+  :host {
+    display: block;
+    margin: 0;
+    padding: 0;
+  }
+
+  .card {
+    float: none;
+    width: 100% !important;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    break-inside: auto;
+  }
+
+  .report-form {
+    display: none;
+  }
+
+  .report-table {
+    overflow: visible;
+  }
+
+  table {
+    box-shadow: none;
+    break-before: auto;
+    break-inside: auto;
+  }
+
+  tr {
+    break-inside: avoid;
+  }
+
+  .card-header {
+    break-after: avoid;
+  }
+}
+

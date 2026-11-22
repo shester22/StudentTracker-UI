@@ -14,18 +14,18 @@ import { By } from '@angular/platform-browser';
 describe('StudentEditComponent', () => {
   let fixture: ComponentFixture<StudentEditComponent>;
   let component: StudentEditComponent;
-  let service: jasmine.SpyObj<StudentService>;
+  let service: jest.Mocked<StudentService>;
   let id: string | null;
 
   beforeEach(async () => {
     id = null;
-    service = jasmine.createSpyObj('StudentService', ['getStudentById', 'UpsertStudent']);
+    service = ({ getStudentById: jest.fn(), UpsertStudent: jest.fn(), getStudentList: jest.fn() } as unknown as jest.Mocked<StudentService>);
     await TestBed.configureTestingModule({
       imports: [StudentEditComponent, FormsModule],
       providers: [
         provideNoopAnimations(),
-        { provide: StudentPaymentService, useValue: jasmine.createSpyObj('StudentPaymentService', ['upsertStudentPayment']) },
-        { provide: StudentAttendanceService, useValue: jasmine.createSpyObj('StudentAttendanceService', ['upsertStudentAttendance']) },
+        { provide: StudentPaymentService, useValue: ({ upsertStudentPayment: jest.fn(), getPayment: jest.fn(), getPaymentList: jest.fn() } as unknown as jest.Mocked<StudentPaymentService>) },
+        { provide: StudentAttendanceService, useValue: ({ upsertStudentAttendance: jest.fn(), upsertStudentAttendanceList: jest.fn(), getStudentAttendanceList: jest.fn() } as unknown as jest.Mocked<StudentAttendanceService>) },
         { provide: StudentService, useValue: service },
         { provide: ActivatedRoute, useValue: { snapshot: { get paramMap() { return convertToParamMap(id ? { id } : {}); } } } }
       ]
@@ -49,13 +49,13 @@ describe('StudentEditComponent', () => {
     expect(service.getStudentById).not.toHaveBeenCalled();
     expect(Object.keys(form().controls).sort()).toEqual(['firstName', 'lastName', 'dateOfBirth', 'lastPaidDues', 'active'].sort());
     form().setValue({ firstName: 'New', lastName: 'Student', dateOfBirth: '02/03/2010', lastPaidDues: '2026-10-01', active: true });
-    service.UpsertStudent.and.callFake(student => of(student));
+    service.UpsertStudent.mockImplementation(student => of(student));
     component.onSubmit(form());
-    const saved = service.UpsertStudent.calls.mostRecent().args[0];
+    const saved = service.UpsertStudent.mock.lastCall![0];
     expect(saved.firstName).toBe('New');
-    expect(saved.dateOfBirth instanceof Date).toBeTrue();
+    expect(saved.dateOfBirth instanceof Date).toBe(true);
     expect(saved.currentRank).toBe(Rank.White);
-    expect(component.isEditMode).toBeTrue();
+    expect(component.isEditMode).toBe(true);
   });
 
   it('loads formatted dates and preserves other student data when updating', async () => {
@@ -66,22 +66,22 @@ describe('StudentEditComponent', () => {
       currentRank: Rank.Green1, active: false, waiverLink: '/waiver',
       classAttendance: [{ attendanceId: 'attendance-1', studentId: id, attendanceDate: '2026-10-21', attendanceType: 'Class' }]
     });
-    service.getStudentById.and.returnValue(of(student));
-    service.UpsertStudent.and.callFake(value => of(value));
+    service.getStudentById.mockReturnValue(of(student));
+    service.UpsertStudent.mockImplementation(value => of(value));
     await render();
     expect(service.getStudentById).toHaveBeenCalledWith(id);
     expect(form().value.dateOfBirth).toBe('02/03/2010');
     expect(form().value.lastPaidDues).toBe('2026-10-01');
-    expect(form().value.active).toBeFalse();
+    expect(form().value.active).toBe(false);
     const rankInput: HTMLInputElement = fixture.nativeElement.querySelector('input[readonly]');
     expect(rankInput.value).toBe('Green1');
     expect(form().controls['currentRank']).toBeUndefined();
     expect(component.student.classAttendance).toEqual(student.classAttendance);
     form().controls['firstName'].setValue('Updated');
     component.onSubmit(form());
-    expect(service.UpsertStudent.calls.mostRecent().args[0].waiverLink).toBe('/waiver');
-    expect(service.UpsertStudent.calls.mostRecent().args[0].classAttendance).toEqual(student.classAttendance);
-    expect(service.UpsertStudent.calls.mostRecent().args[0].firstName).toBe('Updated');
+    expect(service.UpsertStudent.mock.lastCall![0].waiverLink).toBe('/waiver');
+    expect(service.UpsertStudent.mock.lastCall![0].classAttendance).toEqual(student.classAttendance);
+    expect(service.UpsertStudent.mock.lastCall![0].firstName).toBe('Updated');
   });
 
   it('rejects an invalid form and allows retry after a save error', async () => {
@@ -90,9 +90,9 @@ describe('StudentEditComponent', () => {
     expect(service.UpsertStudent).not.toHaveBeenCalled();
     form().controls['firstName'].setValue('Test');
     form().controls['lastName'].setValue('Student');
-    service.UpsertStudent.and.returnValue(throwError(() => new Error('Failed')));
+    service.UpsertStudent.mockReturnValue(throwError(() => new Error('Failed')));
     component.onSubmit(form());
-    expect(component.isSaving).toBeFalse();
+    expect(component.isSaving).toBe(false);
     expect(component.errorMessage).toContain('Unable to save');
     expect(component.student.firstName).toBe('Test');
   });
