@@ -1,0 +1,69 @@
+
+<div class="card" style="width: 90%;">
+  <div class="card-header" >
+    <h3>Student Payment Report</h3>
+  </div>
+  <form #reportForm="ngForm" class="report-form" (ngSubmit)="submit(reportForm)">
+    <mat-form-field appearance="outline">
+      <mat-label>Start Date</mat-label>
+      <input matInput type="date" name="startDate" [(ngModel)]="startDate" required
+        [max]="endDate" [disabled]="isLoading">
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>End Date</mat-label>
+      <input matInput type="date" name="endDate" [(ngModel)]="endDate" required
+        [min]="startDate" [disabled]="isLoading">
+    </mat-form-field>
+    <button mat-flat-button type="button" [disabled]="isLoading" (click)="setYearToDate()">YTD</button>
+    <button mat-flat-button type="submit"
+      [disabled]="reportForm.invalid || !startDate || !endDate || startDate > endDate || isLoading">Submit</button>
+    <button mat-flat-button type="button" class="print-button" [disabled]="payments.data.length === 0" (click)="printReport()">Print</button>
+  </form>
+  @if (startDate && endDate && startDate > endDate) {
+    <p role="alert">End date must be on or after start date.</p>
+  }
+  @if (isLoading) {
+    <p role="status">Loading payment report…</p>
+  }
+  @if (errorMessage) {
+    <p role="alert">{{ errorMessage }}</p>
+  }
+  <div class="report-table">
+    <table mat-table [dataSource]="payments" matSort matSortActive="paymentFor"
+      matSortDirection="asc" matSortDisableClear class="mat-elevation-z8" aria-label="Student payment report">
+      <ng-container matColumnDef="studentName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Student Name</th>
+        <td mat-cell *matCellDef="let payment">
+          <a class="table-link" [routerLink]="['/student-edit', payment.studentId]">{{ payment.studentName }}</a>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="paymentMethod">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Payment Type</th>
+        <td mat-cell *matCellDef="let payment">{{ payment.paymentMethod }}</td>
+      </ng-container>
+      <ng-container matColumnDef="paymentDate">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Payment Date</th>
+        <td mat-cell *matCellDef="let payment">{{ payment.paymentDate | date:'MM/dd/yyyy' }}</td>
+      </ng-container>
+      <ng-container matColumnDef="paymentFor">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Payment For</th>
+        <td mat-cell *matCellDef="let payment">{{ payment.paymentFor }}</td>
+      </ng-container>
+      <ng-container matColumnDef="amount">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Amount</th>
+        <td mat-cell *matCellDef="let payment">{{ payment.amount | currency }}</td>
+        <td mat-footer-cell *matFooterCellDef>{{ totalAmount | currency }}</td>
+      </ng-container>
+      <ng-container matColumnDef="totalLabel">
+        <td mat-footer-cell *matFooterCellDef [attr.colspan]="displayedColumns.length - 1">Total</td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      <tr *matNoDataRow>
+        <td [attr.colspan]="displayedColumns.length">No payments to display.</td>
+      </tr>
+      <tr mat-footer-row *matFooterRowDef="['totalLabel', 'amount']" class="report-total"
+        [style.display]="payments.data.length > 0 ? null : 'none'"></tr>
+    </table>
+  </div>
+</div>

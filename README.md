@@ -38,11 +38,20 @@ This will compile your project and store the build artifacts in the `dist/` dire
 
 ## Running unit tests
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+Unit tests use Jest and jest-preset-angular with jsdom; a browser is not required.
 
 ```bash
-ng test
+npm test
+npm run test:watch
+npm run test:coverage
 ```
+
+Run a single spec with `npm test -- --runTestsByPath src/app/student/student-testing/student-testing.component.spec.ts`.
+Coverage reports are written to `coverage/`. Test configuration lives in `jest.config.cjs`,
+Angular test initialization in `src/setup-jest.ts`, and test TypeScript options in `tsconfig.spec.json`.
+The setup provides jsdom shims for ResizeObserver and native dialogs; browser layout and
+interactive behavior still need browser verification. Use Jest mocks (`jest.fn()`,
+`jest.spyOn()`) for new tests.
 
 ## Running end-to-end tests
 

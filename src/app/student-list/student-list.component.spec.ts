@@ -1,28 +1,21 @@
-/* tslint:disable:no-unused-variable */
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
-
+import { TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
+import { of } from 'rxjs';
 import { StudentListComponent } from './student-list.component';
+import { StudentService } from '../shared/services/student.service';
+import { Student } from '../models/student.model';
 
 describe('StudentListComponent', () => {
-  let component: StudentListComponent;
-  let fixture: ComponentFixture<StudentListComponent>;
-
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ StudentListComponent ]
-    })
-    .compileComponents();
-  }));
-
-  beforeEach(() => {
-    fixture = TestBed.createComponent(StudentListComponent);
-    component = fixture.componentInstance;
+  it('loads and displays students', async () => {
+    const student = Object.assign(new Student(), { studentId: 'student-1', firstName: 'Jane', lastName: 'Doe' });
+    const getStudentList = jest.fn().mockReturnValue(of([student]));
+    await TestBed.configureTestingModule({
+      imports: [StudentListComponent],
+      providers: [provideRouter([]), { provide: StudentService, useValue: { getStudentList } }]
+    }).compileComponents();
+    const fixture = TestBed.createComponent(StudentListComponent);
     fixture.detectChanges();
-  });
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
+    expect(getStudentList).toHaveBeenCalledTimes(1);
+    expect(fixture.nativeElement.textContent).toContain('Jane Doe');
   });
 });

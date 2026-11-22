@@ -15,4 +15,11 @@ import { MatMenuModule } from '@angular/material/menu';
 })
 export class AppComponent {
   title = 'student-tracker';
+  reportsOpen = false;
+
+  closeReportsOnFocusOut(event: FocusEvent): void {
+    if (!(event.currentTarget as HTMLElement).contains(event.relatedTarget as Node | null)) {
+      this.reportsOpen = false;
+    }
+  }
 }

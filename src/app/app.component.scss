@@ -5,6 +5,12 @@
   right: 0;
   z-index: 10;
 }
+
+@media print {
+  .main {
+    display: none;
+  }
+}
 .divider{
   height: 1px;
   background-color: #e0e0e0;
@@ -14,6 +20,8 @@
   flex: 1 1 auto;
 }
 .desktop-links {
+  display: flex;
+  align-items: center;
   margin-right: 16px;
 }
 @media (max-width: 600px) {
@@ -23,3 +31,32 @@
 }
 
 
+
+.reports-navigation {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+}
+
+.reports-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 1;
+  min-width: 160px;
+  padding: 8px;
+  border-radius: 4px;
+  background: var(--mat-menu-container-color, var(--mat-app-background-color, #fff));
+  box-shadow: 0 4px 12px rgb(0 0 0 / 18%);
+}
+
+.reports-dropdown[hidden] {
+  display: none;
+}
+
+.reports-dropdown a {
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+}

@@ -10,6 +10,15 @@
         <button mat-button routerLink="/home">Home</button>
         <button mat-button routerLink="/student-edit">Student Edit</button>
         <button mat-button routerLink="/student-list">Student List</button>
+        <div class="reports-navigation" (mouseenter)="reportsOpen = true" (mouseleave)="reportsOpen = false"
+          (focusout)="closeReportsOnFocusOut($event)" (keydown.escape)="reportsOpen = false; reportsButton.focus()">
+          <button mat-button #reportsButton type="button" aria-controls="reports-dropdown"
+            [attr.aria-expanded]="reportsOpen" (click)="reportsOpen = !reportsOpen"
+            (keydown.arrowdown)="reportsOpen = true">Reports</button>
+          <div id="reports-dropdown" class="reports-dropdown" [hidden]="!reportsOpen">
+            <a mat-button routerLink="/student-payment-report" (click)="reportsOpen = false">Payments</a>
+          </div>
+        </div>
       </div>
 
       <!-- User Profile Dropdown Component -->
